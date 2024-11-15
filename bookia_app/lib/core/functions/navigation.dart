@@ -11,3 +11,8 @@ pushWithReplacement(BuildContext context, Widget newScreen) {
     return newScreen;
   }));
 }
+
+pushAndRemoveUntil(BuildContext context, Widget newScreen) {
+  Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => newScreen), (route) => false);
+}

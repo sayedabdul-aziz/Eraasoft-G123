@@ -1,6 +1,7 @@
 import 'package:bookia_app/core/constants/app_assets.dart';
 import 'package:bookia_app/core/functions/dialogs.dart';
 import 'package:bookia_app/core/functions/navigation.dart';
+import 'package:bookia_app/core/functions/validation.dart';
 import 'package:bookia_app/core/utils/colors.dart';
 import 'package:bookia_app/core/utils/text_styles.dart';
 import 'package:bookia_app/core/widgets/custom_button.dart';
@@ -9,23 +10,24 @@ import 'package:bookia_app/features/auth/data/model/request/user_model_params.da
 import 'package:bookia_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bookia_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:bookia_app/features/auth/presentation/bloc/auth_state.dart';
-import 'package:bookia_app/features/auth/presentation/widgets/or_divider.dart';
-import 'package:bookia_app/features/auth/presentation/widgets/social_login_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  var usernameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -34,9 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is LoginLoadingState) {
+          if (state is RegisterLoadingState) {
             showLoadingDialog(context);
-          } else if (state is LoginSuccessState) {
+          } else if (state is RegisterSuccessState) {
             pushAndRemoveUntil(context, const NavBarWidget());
           } else if (state is AuthErrorState) {
             Navigator.pop(context);
@@ -50,18 +52,33 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Text(
-                  'Welcome back! Glad to see you, Again!',
+                  'Hello! Register to get started',
                   style: getFont30TextStyle(),
                 ),
                 const Gap(32),
                 TextFormField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(
+                    hintText: 'Username',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Username is required';
+                    }
+                    return null;
+                  },
+                ),
+                const Gap(15),
+                TextFormField(
                   controller: emailController,
                   decoration: const InputDecoration(
-                    hintText: 'Enter your email',
+                    hintText: 'Email',
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Email is required';
+                    } else if (!emailValidation(value)) {
+                      return 'Please enter a valid email';
                     }
                     return null;
                   },
@@ -70,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(
-                      hintText: 'Enter your password',
+                      hintText: 'Password',
                       suffixIconConstraints:
                           const BoxConstraints(maxHeight: 17, maxWidth: 53),
                       suffixIcon: Padding(
@@ -86,45 +103,57 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Forgot Password?',
-                          style: getFont14TextStyle(
-                              color: AppColors.darkGreyColor),
-                        )),
-                  ],
+                const Gap(15),
+                TextFormField(
+                  controller: confirmPasswordController,
+                  decoration: InputDecoration(
+                      hintText: 'Confirm password',
+                      suffixIconConstraints:
+                          const BoxConstraints(maxHeight: 17, maxWidth: 53),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        child: SvgPicture.asset(AppAssets.eye),
+                      )),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Confirm Password is required';
+                    } else if (value.length < 8) {
+                      return 'Confirm Password must be at least 8 characters';
+                    } else if (passwordController.text != value) {
+                      return 'Password and Confirm Password must be same';
+                    }
+                    return null;
+                  },
                 ),
-                const Gap(20),
-                CustomButton(
-                    text: 'Login',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(LoginEvent(UserModelParams(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            )));
-                      }
-                    }),
                 const Gap(30),
-                const OrDivider(),
-                const Gap(25),
-                const SocialLoginButtons(),
+                CustomButton(
+                  text: 'Register',
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      context
+                          .read<AuthBloc>()
+                          .add(RegisterEvent(UserModelParams(
+                            email: emailController.text,
+                            name: usernameController.text,
+                            password: passwordController.text,
+                            passwordConfirmation:
+                                confirmPasswordController.text,
+                          )));
+                    }
+                  },
+                ),
                 const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Don\'t have an account?',
+                      'Already have an account?',
                       style: getFont16TextStyle(color: AppColors.darkGreyColor),
                     ),
                     TextButton(
                         onPressed: () {},
                         child: Text(
-                          'Sign Up',
+                          'Sign in',
                           style:
                               getFont16TextStyle(color: AppColors.primaryColor),
                         ))
