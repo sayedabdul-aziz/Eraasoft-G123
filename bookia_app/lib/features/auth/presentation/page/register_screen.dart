@@ -33,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -45,121 +46,124 @@ class _RegisterScreenState extends State<RegisterScreen> {
             showErrorDialog(context, state.message);
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(22),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Text(
-                  'Hello! Register to get started',
-                  style: getFont30TextStyle(),
-                ),
-                const Gap(32),
-                TextFormField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    hintText: 'Username',
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(22),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Text(
+                    'Hello! Register to get started',
+                    style: getFont30TextStyle(),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Username is required';
-                    }
-                    return null;
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'Email',
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Email is required';
-                    } else if (!emailValidation(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                      hintText: 'Password',
-                      suffixIconConstraints:
-                          const BoxConstraints(maxHeight: 17, maxWidth: 53),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        child: SvgPicture.asset(AppAssets.eye),
-                      )),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Password is required';
-                    } else if (value.length < 8) {
-                      return 'Password must be at least 8 characters';
-                    }
-                    return null;
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  controller: confirmPasswordController,
-                  decoration: InputDecoration(
-                      hintText: 'Confirm password',
-                      suffixIconConstraints:
-                          const BoxConstraints(maxHeight: 17, maxWidth: 53),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        child: SvgPicture.asset(AppAssets.eye),
-                      )),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Confirm Password is required';
-                    } else if (value.length < 8) {
-                      return 'Confirm Password must be at least 8 characters';
-                    } else if (passwordController.text != value) {
-                      return 'Password and Confirm Password must be same';
-                    }
-                    return null;
-                  },
-                ),
-                const Gap(30),
-                CustomButton(
-                  text: 'Register',
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      context
-                          .read<AuthBloc>()
-                          .add(RegisterEvent(UserModelParams(
-                            email: emailController.text,
-                            name: usernameController.text,
-                            password: passwordController.text,
-                            passwordConfirmation:
-                                confirmPasswordController.text,
-                          )));
-                    }
-                  },
-                ),
-                const Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Already have an account?',
-                      style: getFont16TextStyle(color: AppColors.darkGreyColor),
+                  const Gap(32),
+                  TextFormField(
+                    controller: usernameController,
+                    decoration: const InputDecoration(
+                      hintText: 'Username',
                     ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Sign in',
-                          style:
-                              getFont16TextStyle(color: AppColors.primaryColor),
-                        ))
-                  ],
-                )
-              ],
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Username is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(15),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      hintText: 'Email',
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email is required';
+                      } else if (!emailValidation(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(15),
+                  TextFormField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        hintText: 'Password',
+                        suffixIconConstraints:
+                            const BoxConstraints(maxHeight: 17, maxWidth: 53),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          child: SvgPicture.asset(AppAssets.eye),
+                        )),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Password is required';
+                      } else if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(15),
+                  TextFormField(
+                    controller: confirmPasswordController,
+                    decoration: InputDecoration(
+                        hintText: 'Confirm password',
+                        suffixIconConstraints:
+                            const BoxConstraints(maxHeight: 17, maxWidth: 53),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          child: SvgPicture.asset(AppAssets.eye),
+                        )),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Confirm Password is required';
+                      } else if (value.length < 8) {
+                        return 'Confirm Password must be at least 8 characters';
+                      } else if (passwordController.text != value) {
+                        return 'Password and Confirm Password must be same';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(30),
+                  CustomButton(
+                    text: 'Register',
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        context
+                            .read<AuthBloc>()
+                            .add(RegisterEvent(UserModelParams(
+                              email: emailController.text,
+                              name: usernameController.text,
+                              password: passwordController.text,
+                              passwordConfirmation:
+                                  confirmPasswordController.text,
+                            )));
+                      }
+                    },
+                  ),
+                  const Gap(20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account?',
+                        style:
+                            getFont16TextStyle(color: AppColors.darkGreyColor),
+                      ),
+                      TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Sign in',
+                            style: getFont16TextStyle(
+                                color: AppColors.primaryColor),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

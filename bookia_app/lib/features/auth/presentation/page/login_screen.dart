@@ -43,94 +43,99 @@ class _LoginScreenState extends State<LoginScreen> {
             showErrorDialog(context, state.message);
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(22),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Text(
-                  'Welcome back! Glad to see you, Again!',
-                  style: getFont30TextStyle(),
-                ),
-                const Gap(32),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your email',
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(22),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Text(
+                    'Welcome back! Glad to see you, Again!',
+                    style: getFont30TextStyle(),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Email is required';
-                    }
-                    return null;
-                  },
-                ),
-                const Gap(15),
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                      suffixIconConstraints:
-                          const BoxConstraints(maxHeight: 17, maxWidth: 53),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        child: SvgPicture.asset(AppAssets.eye),
-                      )),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Password is required';
-                    } else if (value.length < 8) {
-                      return 'Password must be at least 8 characters';
-                    }
-                    return null;
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Forgot Password?',
-                          style: getFont14TextStyle(
-                              color: AppColors.darkGreyColor),
-                        )),
-                  ],
-                ),
-                const Gap(20),
-                CustomButton(
-                    text: 'Login',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(LoginEvent(UserModelParams(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            )));
-                      }
-                    }),
-                const Gap(30),
-                const OrDivider(),
-                const Gap(25),
-                const SocialLoginButtons(),
-                const Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Don\'t have an account?',
-                      style: getFont16TextStyle(color: AppColors.darkGreyColor),
+                  const Gap(32),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your email',
                     ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Sign Up',
-                          style:
-                              getFont16TextStyle(color: AppColors.primaryColor),
-                        ))
-                  ],
-                )
-              ],
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Gap(15),
+                  TextFormField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        hintText: 'Enter your password',
+                        suffixIconConstraints:
+                            const BoxConstraints(maxHeight: 17, maxWidth: 53),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          child: SvgPicture.asset(AppAssets.eye),
+                        )),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Password is required';
+                      } else if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Forgot Password?',
+                            style: getFont14TextStyle(
+                                color: AppColors.darkGreyColor),
+                          )),
+                    ],
+                  ),
+                  const Gap(20),
+                  CustomButton(
+                      text: 'Login',
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          context
+                              .read<AuthBloc>()
+                              .add(LoginEvent(UserModelParams(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              )));
+                        }
+                      }),
+                  const Gap(30),
+                  const OrDivider(),
+                  const Gap(25),
+                  const SocialLoginButtons(),
+                  const Gap(20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account?',
+                        style:
+                            getFont16TextStyle(color: AppColors.darkGreyColor),
+                      ),
+                      TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Sign Up',
+                            style: getFont16TextStyle(
+                                color: AppColors.primaryColor),
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

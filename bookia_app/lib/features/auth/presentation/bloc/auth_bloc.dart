@@ -1,3 +1,4 @@
+import 'package:bookia_app/core/services/local/app_local_storage.dart';
 import 'package:bookia_app/features/auth/data/repo/auth_repo.dart';
 import 'package:bookia_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:bookia_app/features/auth/presentation/bloc/auth_state.dart';
@@ -15,6 +16,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await AuthRepo.register(event.params).then((value) {
         if (value != null) {
+          AppLocalStorage.cacheData(AppLocalStorage.token, value.data?.token);
+
           emit(RegisterSuccessState());
         } else {
           emit(AuthErrorState(
@@ -32,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await AuthRepo.login(event.params).then((value) {
         if (value != null) {
+          AppLocalStorage.cacheData(AppLocalStorage.token, value.data?.token);
           emit(LoginSuccessState());
         } else {
           emit(AuthErrorState(
