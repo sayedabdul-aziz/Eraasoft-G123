@@ -24,11 +24,6 @@ class _BannerWidgetState extends State<BannerWidget> {
 
   int currentIndex = 0;
   @override
-/*************  ✨ Codeium Command ⭐  *************/
-  /// Returns a Column widget that displays a CarouselSlider and a SmoothPageIndicator.
-  ///
-  /// The CarouselSlider displays the list of sliders retrieved from the server and
-/******  9d91e4fe-b4de-4bee-9c61-2ce9adab41e0  *******/
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       buildWhen: (pervious, current) =>

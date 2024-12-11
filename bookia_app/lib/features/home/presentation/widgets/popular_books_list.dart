@@ -1,3 +1,4 @@
+import 'package:bookia_app/core/functions/navigation.dart';
 import 'package:bookia_app/core/utils/colors.dart';
 import 'package:bookia_app/core/utils/text_styles.dart';
 import 'package:bookia_app/core/widgets/custom_button.dart';
@@ -5,6 +6,7 @@ import 'package:bookia_app/features/home/data/models/get_arrivals_books_response
 import 'package:bookia_app/features/home/presentation/bloc/home_bloc.dart';
 import 'package:bookia_app/features/home/presentation/bloc/home_event.dart';
 import 'package:bookia_app/features/home/presentation/bloc/home_state.dart';
+import 'package:bookia_app/features/home/presentation/page/book_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -50,7 +52,15 @@ class _PopularBooksListState extends State<PopularBooksList> {
                       mainAxisSpacing: 11,
                       mainAxisExtent: 280),
                   itemBuilder: (context, index) {
-                    return GridBookItem(book: booksList[index]);
+                    return GestureDetector(
+                        onTap: () {
+                          pushTo(
+                              context,
+                              BookDetailsScreen(
+                                product: booksList[index],
+                              ));
+                        },
+                        child: GridBookItem(book: booksList[index]));
                   },
                   itemCount: booksList.length,
                 ),
@@ -85,12 +95,15 @@ class GridBookItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-              child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              book.image ?? '',
-              width: double.infinity,
-              fit: BoxFit.cover,
+              child: Hero(
+            tag: book.id.toString(),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                book.image ?? '',
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           )),
           const Gap(10),
@@ -105,9 +118,9 @@ class GridBookItem extends StatelessWidget {
             children: [
               Text(
                 '${book.priceAfterDiscount?.toStringAsFixed(1)} EGP',
-                style: getFont16TextStyle(),
+                style: getFont14TextStyle(),
               ),
-              const Gap(10),
+              const Gap(8),
               Expanded(
                 child: CustomButton(
                     bgColor: AppColors.darkColor,

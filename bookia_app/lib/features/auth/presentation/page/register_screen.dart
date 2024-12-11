@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             pushAndRemoveUntil(context, const NavBarWidget());
           } else if (state is AuthErrorState) {
             Navigator.pop(context);
-            showErrorDialog(context, state.message);
+            showAppDialog(context, state.message);
           }
         },
         child: SingleChildScrollView(

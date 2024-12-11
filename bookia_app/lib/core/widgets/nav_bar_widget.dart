@@ -1,11 +1,15 @@
 import 'package:bookia_app/core/constants/app_assets.dart';
 import 'package:bookia_app/core/utils/colors.dart';
+import 'package:bookia_app/features/cart/presentation/page/cart_screen.dart';
 import 'package:bookia_app/features/home/presentation/page/home_screen.dart';
+import 'package:bookia_app/features/profile/presentation/page/profile_view.dart';
+import 'package:bookia_app/features/wishlist/presentation/page/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class NavBarWidget extends StatefulWidget {
-  const NavBarWidget({super.key});
+  const NavBarWidget({super.key, this.preIndex});
+  final int? preIndex;
 
   @override
   State<NavBarWidget> createState() => _NavBarWidgetState();
@@ -13,11 +17,17 @@ class NavBarWidget extends StatefulWidget {
 
 class _NavBarWidgetState extends State<NavBarWidget> {
   int currentPage = 0;
+  @override
+  void initState() {
+    super.initState();
+    currentPage = widget.preIndex ?? 0;
+  }
+
   List<Widget> pages = [
     const HomeScreen(),
-    const Center(child: Text('Search')),
-    const Center(child: Text('Profile')),
-    const Center(child: Text('Profile')),
+    const WishlistScreen(),
+    const CartScreen(),
+    const ProfileView(),
   ];
   @override
   Widget build(BuildContext context) {

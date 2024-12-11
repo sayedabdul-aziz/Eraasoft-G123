@@ -9,6 +9,7 @@ import 'package:bookia_app/features/auth/data/model/request/user_model_params.da
 import 'package:bookia_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bookia_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:bookia_app/features/auth/presentation/bloc/auth_state.dart';
+import 'package:bookia_app/features/auth/presentation/page/register_screen.dart';
 import 'package:bookia_app/features/auth/presentation/widgets/or_divider.dart';
 import 'package:bookia_app/features/auth/presentation/widgets/social_login_buttons.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
             pushAndRemoveUntil(context, const NavBarWidget());
           } else if (state is AuthErrorState) {
             Navigator.pop(context);
-            showErrorDialog(context, state.message);
+            showAppDialog(context, state.message);
           }
         },
         child: SingleChildScrollView(
@@ -126,7 +127,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             getFont16TextStyle(color: AppColors.darkGreyColor),
                       ),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            pushWithReplacement(
+                                context, const RegisterScreen());
+                          },
                           child: Text(
                             'Sign Up',
                             style: getFont16TextStyle(
