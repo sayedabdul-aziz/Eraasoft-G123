@@ -6,7 +6,10 @@ final class AuthInitial extends AuthState {}
 
 final class LoginLoadingState extends AuthState {}
 
-final class LoginSuccessState extends AuthState {}
+final class LoginSuccessState extends AuthState {
+  final String userType;
+  LoginSuccessState({required this.userType});
+}
 
 final class RegisterLoadingState extends AuthState {}
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -12,6 +10,7 @@ import 'package:se7ety/core/utils/text_style.dart';
 import 'package:se7ety/core/widgets/custom_button.dart';
 import 'package:se7ety/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:se7ety/feature/auth/presentation/page/signup_view.dart';
+import 'package:se7ety/feature/patient/nav_bar.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key, required this.userType});
@@ -46,8 +45,11 @@ class _LoginViewState extends State<LoginView> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            Navigator.pop(context);
-            log('success');
+            if (state.userType == UserType.doctor.toString()) {
+              // pushAndRemoveUntil(context, const DoctorRegistrationView());
+            } else {
+              pushAndRemoveUntil(context, const PatientNavBarWidget());
+            }
           } else if (state is LoginLoadingState) {
             showLoadingDialog(context);
           } else if (state is AuthErrorState) {

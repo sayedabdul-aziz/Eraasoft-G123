@@ -11,6 +11,7 @@ import 'package:se7ety/core/widgets/custom_button.dart';
 import 'package:se7ety/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:se7ety/feature/auth/presentation/page/doctor_registeration_view.dart';
 import 'package:se7ety/feature/auth/presentation/page/login_view.dart';
+import 'package:se7ety/feature/patient/nav_bar.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key, required this.userType});
@@ -44,7 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
             if (widget.userType == UserType.doctor) {
               pushAndRemoveUntil(context, const DoctorRegistrationView());
             } else {
-              // home page for patient
+              pushAndRemoveUntil(context, const PatientNavBarWidget());
             }
           } else if (state is RegisterLoadingState) {
             showLoadingDialog(context);

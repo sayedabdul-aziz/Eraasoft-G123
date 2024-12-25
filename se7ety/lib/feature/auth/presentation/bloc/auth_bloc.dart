@@ -19,9 +19,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> login(LoginEvent event, Emitter<AuthState> emit) async {
     emit(LoginLoadingState());
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      var credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: event.email, password: event.password);
-      emit(LoginSuccessState());
+
+      emit(LoginSuccessState(userType: credential.user?.photoURL ?? ''));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         emit(AuthErrorState(message: 'المستخدم غير موجود'));
@@ -44,8 +45,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       User? user = credential.user;
-      user?.updateDisplayName(event.name);
-
+      await user?.updateDisplayName(event.name);
+      // use photo url as a user role
+      await user?.updatePhotoURL(event.userType.toString());
       // store in firestore
       if (event.userType == UserType.doctor) {
         FirebaseFirestore.instance.collection('doctors').doc(user?.uid).set({
